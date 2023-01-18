@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "node",
+    "strict": true,
+    "types": ["@league-of-foundry-developers/foundry-vtt-types"]
+  },
+  "include": ["src", "scripts"]
+}
