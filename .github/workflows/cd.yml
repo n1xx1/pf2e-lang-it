@@ -11,12 +11,24 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: denoland/setup-deno@v1
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
         with:
-          deno-version: v1.x
+          version: latest
+
+      - name: Cache pnpm Deps
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: pnpm-store-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-store-
+
+      - name: Install pnpm Deps
+        run: pnpm install
 
       - name: Build
-        run: deno run -A scripts/build.ts
+        run: pnpm run build
 
       - name: Update Manifest
         run: |
