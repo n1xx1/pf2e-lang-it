@@ -56,22 +56,34 @@ for (const [id, mapping] of Object.entries(packs)) {
   const source = pathJoin(tradCompendiumPath, `${id}.json`);
   const dist = pathJoin(distLangCompendiums, `pf2e.${id}.json`);
 
-  await copyJsonFile(source, dist, (contents) => ({
-    ...contents,
-    mapping,
-  })).catch(() => {});
+  await copyJsonFile<BabeleCompendium>(source, dist, (contents) => {
+    if (!contents?.label) {
+      return;
+    }
+    return {
+      ...contents,
+      mapping,
+    };
+  }).catch(() => {});
 }
 
 process.exit();
+
+type BabeleCompendium = {
+  label: string;
+  entries: Record<string, AnyJson>;
+};
 
 type AnyJson = Record<string, unknown>;
 
 async function copyJsonFile<T1 = AnyJson>(
   source: string,
   output: string,
-  transformer: (x: T1) => AnyJson = (x) => x as AnyJson
+  transformer: (x: T1) => AnyJson | null | undefined = (x) => x as AnyJson
 ) {
-  await writeFileJson(output, transformer(await readFileJson(source)));
+  const transformed = transformer(await readFileJson(source));
+  if (!transformed) return;
+  await writeFileJson(output, transformed);
 }
 
 async function readFileJson<T = AnyJson>(file: string): Promise<T> {
