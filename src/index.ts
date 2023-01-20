@@ -21,8 +21,11 @@ Hooks.once("init", () => {
     "pf2e-lang-it-time": timePf2,
     "pf2e-lang-it-list": listPf2,
   });
+});
 
+Hooks.once("ready", () => {
   loadOriginalSystemLanguage().then((originalLanguage) => {
+    console.log(`pf2e-lang-it | loaded original translation`);
     generateSpellcastingEntryTitles(originalLanguage);
   });
 });
