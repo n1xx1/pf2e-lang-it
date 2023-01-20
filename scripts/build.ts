@@ -1,12 +1,17 @@
 import { packs } from "./packs";
 import { build as esbuildBuild } from "esbuild";
-import { join as pathJoin } from "path";
-import { mkdir, readFile, rmdir, writeFile } from "fs/promises";
+import { join as pathJoin, resolve as pathResolve } from "path";
+import {
+  mkdir as fsMkdir,
+  readFile as fsReadFile,
+  rm as fsRm,
+  writeFile as fsWriteFile,
+} from "fs/promises";
 
-const cwd = process.cwd();
+const cwd = pathResolve(process.cwd());
 const outdir = pathJoin(cwd, "dist");
 
-await rmdir(outdir, { recursive: true });
+await fsRm(outdir, { recursive: true });
 
 await esbuildBuild({
   entryPoints: {
@@ -38,14 +43,14 @@ const languageCode = "it";
 const tradPath = pathJoin(cwd, "sources", "trad", languageCode);
 
 const distLang = pathJoin(outdir, "lang");
-await mkdir(distLang);
+await fsMkdir(distLang);
 const tradLangPath = pathJoin(tradPath, `${languageCode}.json`);
 const distLangPath = pathJoin(distLang, `${languageCode}.json`);
 await copyJsonFile(tradLangPath, distLangPath);
 
 const tradCompendiumPath = pathJoin(tradPath, "compendium");
 const distLangCompendiums = pathJoin(distLang, "compendiums");
-await mkdir(distLangCompendiums);
+await fsMkdir(distLangCompendiums);
 for (const [id, mapping] of Object.entries(packs)) {
   const source = pathJoin(tradCompendiumPath, `${id}.json`);
   const dist = pathJoin(distLangCompendiums, `pf2e.${id}.json`);
@@ -69,7 +74,7 @@ async function copyJsonFile<T1 = AnyJson>(
 }
 
 async function readFileJson<T = AnyJson>(file: string): Promise<T> {
-  const contents = await readFile(file, "utf-8");
+  const contents = await fsReadFile(file, "utf-8");
   return JSON.parse(contents);
 }
 
@@ -77,5 +82,5 @@ async function writeFileJson<T = AnyJson>(
   file: string,
   data: T
 ): Promise<void> {
-  await writeFile(file, JSON.stringify(data, null, 2));
+  await fsWriteFile(file, JSON.stringify(data, null, 2));
 }
