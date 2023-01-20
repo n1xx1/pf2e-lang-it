@@ -26,7 +26,7 @@ const itemMappings: CompendiumMappingDefinition = {
     converter: "pf2e-lang-it-time",
     path: "system.time.value",
   },
-  prerequisites: {
+  featPrerequisites: {
     converter: "pf2e-lang-it-list",
     path: "system.prerequisites.value",
   },
