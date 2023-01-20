@@ -3,7 +3,7 @@ import { CompendiumMappingDefinition } from "../src/babele";
 const actorMappings: CompendiumMappingDefinition = {
   name: "name",
   description: "system.description.value",
-  item: {
+  items: {
     path: "items",
     converter: "pf2e-lang-it-fromPack",
   },
