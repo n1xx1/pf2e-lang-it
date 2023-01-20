@@ -20,6 +20,8 @@ Hooks.once("init", () => {
     "pf2e-lang-it-range": rangePf2,
     "pf2e-lang-it-time": timePf2,
     "pf2e-lang-it-list": listPf2,
+    "pf2e-lang-it-distance": distancePf2,
+    // TODO: actor speed
   });
 });
 
@@ -93,6 +95,14 @@ function rangePf2(range: string | null | undefined, translation?: string) {
       return `${convertMilesString(rangeStr)} miglia`;
     }
   }
+}
+
+function distancePf2(distance: number | string) {
+  if (!distance || !convertEnabled) {
+    return distance;
+  }
+  const num = typeof distance === "string" ? parseInt(distance) : distance;
+  return convertFeet(num);
 }
 
 function convertFeetString(v: string) {

@@ -10,6 +10,7 @@ const actorMappings: CompendiumMappingDefinition = {
   hazardDisable: "system.details.disable",
   hazardReset: "system.details.reset",
   hazardRoutine: "system.details.routine",
+  // TODO: actor speed
 };
 
 const itemMappings: CompendiumMappingDefinition = {
@@ -25,6 +26,14 @@ const itemMappings: CompendiumMappingDefinition = {
   spellTime: {
     converter: "pf2e-lang-it-time",
     path: "system.time.value",
+  },
+  spellDuration: {
+    converter: "pf2e-lang-it-time",
+    path: "system.duration.value",
+  },
+  spellArea: {
+    converter: "pf2e-lang-it-distance",
+    path: "system.area.value",
   },
   featPrerequisites: {
     converter: "pf2e-lang-it-list",
