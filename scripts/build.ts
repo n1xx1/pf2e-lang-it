@@ -11,7 +11,8 @@ import {
 const cwd = pathResolve(process.cwd());
 const outdir = pathJoin(cwd, "dist");
 
-await fsRm(outdir, { recursive: true });
+await fsRm(outdir, { recursive: true }).catch(() => {});
+await fsMkdir(outdir, { recursive: true });
 
 await esbuildBuild({
   entryPoints: {
