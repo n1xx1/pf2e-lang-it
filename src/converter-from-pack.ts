@@ -27,14 +27,27 @@ function findTranslationSource(
       return null;
     }
 
-    const referencedTranslation = pack.translationsFor({ _id: id });
+    const foundryPack = game.packs.get(`pf2e.${packName}`)!;
+    const referenced = foundryPack!.index.get(id)!;
+    const referencedName = (referenced as any).originalName ?? referenced.name;
+    const referencedTranslation = pack.translationsFor({
+      _id: id,
+      name: referencedName,
+    });
+
     if (!itemId) {
       return [referencedTranslation, pack.mapping];
     }
 
     if (referencedTranslation?.items) {
-      const name = game.packs.get(`pf2e.${packName}`)!.index.get(itemId)!.name;
+      // try get the real item... will probably fail.
+      // TODO: make it work with foundryPack.getDocument(id)
 
+      const items: any[] = (foundryPack.get(id) as any)?.items;
+      if (!items) {
+        return null;
+      }
+      const name = items?.find((item: any) => item._id == itemId);
       return [
         getTranslationForItem(
           { _id: itemId, name },
