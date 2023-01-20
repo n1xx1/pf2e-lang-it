@@ -1,4 +1,6 @@
 import { fromPackPf2 } from "./converter-from-pack";
+import { generateSpellcastingEntryTitles } from "./spellcasting-entry";
+import { loadOriginalSystemLanguage } from "./utils";
 
 const convertEnabled = true;
 
@@ -18,6 +20,10 @@ Hooks.once("init", () => {
     "pf2e-lang-it-range": rangePf2,
     "pf2e-lang-it-time": timePf2,
     "pf2e-lang-it-list": listPf2,
+  });
+
+  loadOriginalSystemLanguage().then((originalLanguage) => {
+    generateSpellcastingEntryTitles(originalLanguage);
   });
 });
 

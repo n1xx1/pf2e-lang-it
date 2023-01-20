@@ -1,4 +1,5 @@
 import { Converter } from "./babele";
+import { spellcastingEntries } from "./spellcasting-entry";
 
 let dynamicMapping = new CompendiumMapping("Item");
 
@@ -84,6 +85,17 @@ export const fromPackPf2: Converter<any[]> = (items, translations) => {
           inplace: false,
         })
       );
+    }
+
+    if (data.type === "spellcastingEntry") {
+      const spellcastingEntryName = spellcastingEntries[data.name];
+      if (spellcastingEntryName) {
+        translationData = { name: spellcastingEntryName };
+      }
+    }
+
+    if (!translationData) {
+      return data;
     }
 
     return mergeObject(
