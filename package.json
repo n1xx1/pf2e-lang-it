@@ -1,16 +1,11 @@
 {
   "name": "pf2e-lang-it",
-  "version": "4.6.8.1",
-  "description": "",
-  "main": "index.js",
+  "private": "true",
   "type": "module",
   "scripts": {
     "build:scripts": "esbuild scripts/build.ts --bundle --outdir=tmp --platform=node --format=esm --external:esbuild",
     "build": "pnpm run build:scripts && node tmp/build.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@league-of-foundry-developers/foundry-vtt-types": "^9.280.0",
     "@types/node": "^18.11.18",
