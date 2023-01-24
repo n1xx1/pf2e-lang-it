@@ -1,7 +1,15 @@
 import { fromPackPf2 } from "./converter-from-pack";
+import { otherSpeedsPf2, speedPf2 } from "./converter-speeds";
+import { libWrapper } from "./libwrapper";
 import { generateSpellcastingEntryTitles } from "./spellcasting-entry";
-import { loadOriginalSystemLanguage } from "./utils";
+import {
+  convertFeet,
+  convertFeetString,
+  convertMilesString,
+  loadOriginalSystemLanguage,
+} from "./utils";
 
+const ID = "pf2e-lang-it";
 const convertEnabled = true;
 
 Hooks.once("init", () => {
@@ -16,21 +24,43 @@ Hooks.once("init", () => {
   });
 
   Babele.get().registerConverters({
-    "pf2e-lang-it-fromPack": fromPackPf2,
-    "pf2e-lang-it-range": rangePf2,
-    "pf2e-lang-it-time": timePf2,
-    "pf2e-lang-it-list": listPf2,
-    "pf2e-lang-it-distance": distancePf2,
-    // TODO: actor speed
+    [`${ID}-fromPack`]: fromPackPf2,
+    [`${ID}-range`]: rangePf2,
+    [`${ID}-time`]: timePf2,
+    [`${ID}-list`]: listPf2,
+    [`${ID}-distance`]: distancePf2,
+    [`${ID}-speed`]: speedPf2,
+    [`${ID}-otherSpeeds`]: otherSpeedsPf2,
+    [`${ID}-heightening`]: heighteningPf2,
   });
 });
 
 Hooks.once("ready", () => {
+  libWrapper!.register(
+    ID,
+    "game.i18n.format",
+    (
+      wrapped: typeof game.i18n.format,
+      stringId: string,
+      data?: Record<string, unknown>
+    ): string => {
+      if (game.i18n.lang === "it" && stringId === "PF2E.SpellArea") {
+        data!.areaSize = convertFeet(data!.areaSize as number);
+      }
+      return wrapped(stringId, data);
+    },
+    "WRAPPER"
+  );
+
   loadOriginalSystemLanguage().then((originalLanguage) => {
-    console.log(`pf2e-lang-it | loaded original translation`);
+    console.log(`${ID} | loaded original translation`);
     generateSpellcastingEntryTitles(originalLanguage);
   });
 });
+
+function heighteningPf2(value: any, translation?: any) {
+  return value;
+}
 
 function listPf2(
   value: { value: string }[] | undefined,
@@ -103,27 +133,4 @@ function distancePf2(distance: number | string) {
   }
   const num = typeof distance === "string" ? parseInt(distance) : distance;
   return convertFeet(num);
-}
-
-function convertFeetString(v: string) {
-  return convertFeet(parseInt(v.replace(/,/g, ""))).toLocaleString("it-IT");
-}
-
-function convertMilesString(v: string) {
-  return convertMiles(parseInt(v.replace(/,/g, ""))).toLocaleString("it-IT");
-}
-
-function convertFeet(v: number) {
-  if (v % 5 == 0) {
-    return (v / 5) * 1.5;
-  }
-  return round(v * 0.3);
-}
-
-function convertMiles(v: number) {
-  return round(v * 1.6);
-}
-
-function round(num: number) {
-  return Math.round((num + Number.EPSILON) * 100) / 100;
 }

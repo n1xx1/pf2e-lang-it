@@ -31,3 +31,26 @@ export async function loadOriginalSystemLanguage() {
   }
   return trad;
 }
+
+export function convertFeetString(v: string) {
+  return convertFeet(parseInt(v.replace(/,/g, ""))).toLocaleString("it-IT");
+}
+
+export function convertMilesString(v: string) {
+  return convertMiles(parseInt(v.replace(/,/g, ""))).toLocaleString("it-IT");
+}
+
+export function convertFeet(v: number) {
+  if (v % 5 == 0) {
+    return (v / 5) * 1.5;
+  }
+  return round(v * 0.3);
+}
+
+export function convertMiles(v: number) {
+  return round(v * 1.6);
+}
+
+export function round(num: number) {
+  return Math.round((num + Number.EPSILON) * 100) / 100;
+}

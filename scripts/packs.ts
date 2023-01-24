@@ -10,7 +10,17 @@ const actorMappings: CompendiumMappingDefinition = {
   hazardDisable: "system.details.disable",
   hazardReset: "system.details.reset",
   hazardRoutine: "system.details.routine",
-  // TODO: actor speed
+  npcSpeed: {
+    path: "system.attributes.speed",
+    converter: "pf2e-lang-it-speed",
+  },
+  npcOtherSpeeds: {
+    path: "system.attributes.speed.otherSpeeds",
+    converter: "pf2e-lang-it-otherSpeeds",
+  },
+  npcHp: "system.attributes.hp.details",
+  npcAc: "system.attributes.ac.details",
+  npcAllSaves: "system.attributes.allSaves.value",
 };
 
 const itemMappings: CompendiumMappingDefinition = {
@@ -31,9 +41,10 @@ const itemMappings: CompendiumMappingDefinition = {
     converter: "pf2e-lang-it-time",
     path: "system.duration.value",
   },
-  spellArea: {
-    converter: "pf2e-lang-it-distance",
-    path: "system.area.value",
+  spellArea: "system.area.details",
+  spellHeightening: {
+    converter: "pf2e-lang-it-heightening",
+    path: "system.heightening.levels",
   },
   featPrerequisites: {
     converter: "pf2e-lang-it-list",
