@@ -58,6 +58,10 @@ Hooks.once("ready", () => {
   });
 });
 
+Hooks.once("babele.ready", () => {
+  game.pf2e.ConditionManager.initialize();
+});
+
 function heighteningPf2(value: any, translation?: any) {
   return value;
 }
