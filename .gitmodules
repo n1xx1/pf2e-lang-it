@@ -1,3 +1,4 @@
 [submodule "sources"]
 	path = sources
 	url = ../../n1xx1/foundryvtt-pf2e-language-sources.git
+	branch = main
