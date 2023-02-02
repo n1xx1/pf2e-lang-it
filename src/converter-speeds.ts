@@ -34,7 +34,7 @@ export const otherSpeedsPf2: Converter<Pf2OtherSpeed[] | undefined | null> = (
   otherSpeeds,
   translation: Record<string, string>
 ) => {
-  if (!otherSpeeds) {
+  if (!otherSpeeds || !translation) {
     return otherSpeeds;
   }
   return otherSpeeds.map((s) => {
