@@ -52,10 +52,11 @@ Hooks.once("ready", () => {
     "WRAPPER"
   );
 
-  loadOriginalSystemLanguage().then((originalLanguage) => {
-    console.log(`${ID} | loaded original translation`);
-    generateSpellcastingEntryTitles(originalLanguage);
-  });
+  generateSpellcastingEntryTitles((game.i18n as any)._fallback);
+
+  // loadOriginalSystemLanguage().then((originalLanguage) => {
+  //   console.log(`${ID} | loaded original translation`);
+  // });
 });
 
 Hooks.once("babele.ready", () => {
