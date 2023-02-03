@@ -7,6 +7,7 @@ import {
   convertFeetString,
   convertMilesString,
   loadOriginalSystemLanguage,
+  removeMismatchingTypes,
 } from "./utils";
 
 const ID = "pf2e-lang-it";
@@ -52,11 +53,8 @@ Hooks.once("ready", () => {
     "WRAPPER"
   );
 
+  removeMismatchingTypes((game.i18n as any)._fallback, game.i18n.translations);
   generateSpellcastingEntryTitles((game.i18n as any)._fallback);
-
-  // loadOriginalSystemLanguage().then((originalLanguage) => {
-  //   console.log(`${ID} | loaded original translation`);
-  // });
 });
 
 Hooks.once("babele.ready", () => {

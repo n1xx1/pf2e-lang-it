@@ -65,8 +65,7 @@ type MergeOptions = {
   performDeletions: boolean;
 };
 
-function removeMismatchingTypes(fallback: any, other: any = {}) {
-  // Iterate over the other object
+export function removeMismatchingTypes(fallback: any, other: any = {}) {
   for (let k of Object.keys(other)) {
     const replacement = other[k];
     const replacementType = getType(replacement);
