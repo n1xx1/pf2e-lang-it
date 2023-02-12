@@ -65,36 +65,27 @@ type MergeOptions = {
   performDeletions: boolean;
 };
 
-function removeMismatchingTypes(fallback: any, other: any = {}) {
-  // Iterate over the other object
+export function removeMismatchingTypes(fallback: any, other: any = {}) {
   for (let k of Object.keys(other)) {
     const replacement = other[k];
     const replacementType = getType(replacement);
 
-    if (fallback.hasOwnProperty(k)) {
-      const original = fallback[k];
-      const originalType = getType(original);
-
-      if (replacementType === "Object" && originalType === "Object") {
-        removeMismatchingTypes(original, replacement);
-        continue;
-      }
-      if (originalType !== "undefined" && replacementType !== originalType) {
-        delete other[k];
-      }
+    if (!fallback.hasOwnProperty(k)) {
+      delete other[k];
       continue;
     }
 
-    if (replacementType === "Object") {
-      fallback[k] = mergeObject({}, replacement, {
-        insertKeys: true,
-        inplace: true,
-      });
-      return;
+    const original = fallback[k];
+    const originalType = getType(original);
+
+    if (replacementType === "Object" && originalType === "Object") {
+      removeMismatchingTypes(original, replacement);
+      continue;
     }
 
-    // Insert a key
-    fallback[k] = replacement;
+    if (originalType !== "undefined" && replacementType !== originalType) {
+      delete other[k];
+    }
   }
 
   return fallback;

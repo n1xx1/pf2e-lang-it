@@ -21,6 +21,7 @@ const actorMappings: CompendiumMappingDefinition = {
   npcHp: "system.attributes.hp.details",
   npcAc: "system.attributes.ac.details",
   npcAllSaves: "system.attributes.allSaves.value",
+  npcSenses: "system.traits.senses.value",
 };
 
 const itemMappings: CompendiumMappingDefinition = {
