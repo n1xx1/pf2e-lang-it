@@ -86,10 +86,13 @@ function listPf2(
 
 const allowedTimes = ["1", "2", "3", "free", "reaction"];
 
-function timePf2(time: string | null, translation?: string) {
+function timePf2(time: string | number | null, translation?: string) {
   if (!time || !convertEnabled) return time;
   if (translation) {
     return translation;
+  }
+  if (typeof time !== "string") {
+    return time;
   }
   time = time.toLowerCase();
   if (allowedTimes.includes(time)) {
@@ -119,7 +122,12 @@ function rangePf2(range: string | null | undefined, translation?: string) {
     return translation;
   }
   range = range.toLowerCase();
-
+  if (range === "touch") {
+    return "tocco";
+  }
+  if (range === "planetary") {
+    return "planetario";
+  }
   const match = range.match(/^([\d.,]+)\s*(|feet|foot|miles?)$/);
   if (match) {
     const [rangeStr, type] = match;
