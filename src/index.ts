@@ -6,7 +6,6 @@ import {
   convertFeet,
   convertFeetString,
   convertMilesString,
-  loadOriginalSystemLanguage,
   removeMismatchingTypes,
 } from "./utils";
 
@@ -19,7 +18,7 @@ Hooks.once("init", () => {
   }
 
   Babele.get().register({
-    module: "pf2e-lang-it",
+    module: ID,
     lang: "it",
     dir: "lang/compendiums",
   });
@@ -123,7 +122,7 @@ function rangePf2(range: string | null | undefined, translation?: string) {
   }
   range = range.toLowerCase();
   if (range === "touch") {
-    return "tocco";
+    return "contatto";
   }
   if (range === "planetary") {
     return "planetario";

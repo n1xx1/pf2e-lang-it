@@ -1,22 +1,24 @@
 import { CompendiumMappingDefinition } from "../src/babele";
 
+const ID = "pf2e-lang-it";
+
 const actorMappings: CompendiumMappingDefinition = {
   name: "name",
   description: "system.description.value",
   items: {
     path: "items",
-    converter: "pf2e-lang-it-fromPack",
+    converter: `${ID}-fromPack`,
   },
   hazardDisable: "system.details.disable",
   hazardReset: "system.details.reset",
   hazardRoutine: "system.details.routine",
   npcSpeed: {
     path: "system.attributes.speed",
-    converter: "pf2e-lang-it-speed",
+    converter: `${ID}-speed`,
   },
   npcOtherSpeeds: {
     path: "system.attributes.speed.otherSpeeds",
-    converter: "pf2e-lang-it-otherSpeeds",
+    converter: `${ID}-otherSpeeds`,
   },
   npcHp: "system.attributes.hp.details",
   npcAc: "system.attributes.ac.details",
@@ -27,29 +29,37 @@ const actorMappings: CompendiumMappingDefinition = {
 const itemMappings: CompendiumMappingDefinition = {
   name: "name",
   description: "system.description.value",
+};
+
+const itemFeatsMappings: CompendiumMappingDefinition = {
+  ...itemMappings,
+  featPrerequisites: {
+    converter: `${ID}-list`,
+    path: "system.prerequisites.value",
+  },
+};
+
+const itemSpellMappings: CompendiumMappingDefinition = {
+  ...itemMappings,
   spellMaterials: "system.materials.value",
   spellTarget: "system.target.value",
   spellCost: "system.cost.value",
   spellRange: {
-    converter: "pf2e-lang-it-range",
+    converter: `${ID}-range`,
     path: "system.range.value",
   },
   spellTime: {
-    converter: "pf2e-lang-it-time",
+    converter: `${ID}-time`,
     path: "system.time.value",
   },
   spellDuration: {
-    converter: "pf2e-lang-it-time",
+    converter: `${ID}-time`,
     path: "system.duration.value",
   },
   spellArea: "system.area.details",
   spellHeightening: {
-    converter: "pf2e-lang-it-heightening",
+    converter: `${ID}-heightening`,
     path: "system.heightening.levels",
-  },
-  featPrerequisites: {
-    converter: "pf2e-lang-it-list",
-    path: "system.prerequisites.value",
   },
 };
 
@@ -101,38 +111,38 @@ export const packs: Record<string, CompendiumMappingDefinition> = {
   "night-of-the-gray-death-bestiary": actorMappings,
   "crown-of-the-kobold-king-bestiary": actorMappings,
   vehicles: actorMappings,
-  actionspf2e: itemMappings,
-  ancestries: itemMappings,
-  ancestryfeatures: itemMappings,
-  backgrounds: itemMappings,
-  classes: itemMappings,
-  classfeatures: itemMappings,
-  "familiar-abilities": itemMappings,
-  "feats-srd": itemMappings,
-  heritages: itemMappings,
-  "spells-srd": itemMappings,
-  "bestiary-effects": itemMappings,
-  domains: itemMappings,
-  "boons-and-curses": itemMappings,
-  conditionitems: itemMappings,
-  "campaign-effects": itemMappings,
-  "equipment-effects": itemMappings,
-  "other-effects": itemMappings,
-  "feat-effects": itemMappings,
+  "spells-srd": itemSpellMappings,
+  actionspf2e: itemFeatsMappings,
+  ancestries: itemFeatsMappings,
+  ancestryfeatures: itemFeatsMappings,
+  backgrounds: itemFeatsMappings,
+  classes: itemFeatsMappings,
+  classfeatures: itemFeatsMappings,
+  "familiar-abilities": itemFeatsMappings,
+  "feats-srd": itemFeatsMappings,
+  heritages: itemFeatsMappings,
+  "bestiary-effects": itemFeatsMappings,
+  domains: itemFeatsMappings,
+  "boons-and-curses": itemFeatsMappings,
+  conditionitems: itemFeatsMappings,
+  "campaign-effects": itemFeatsMappings,
+  "equipment-effects": itemFeatsMappings,
+  "other-effects": itemFeatsMappings,
+  "feat-effects": itemFeatsMappings,
   // "pathfinder-society-boons": {},
-  "spell-effects": itemMappings,
-  "equipment-srd": itemMappings,
-  deities: itemMappings,
+  "spell-effects": itemFeatsMappings,
+  "equipment-srd": itemFeatsMappings,
+  deities: itemFeatsMappings,
   // "iconics": {},
   // "paizo-pregens": {},
   // "rollable-tables": {},
   // "criticaldeck": {},
   // "hero-point-deck": {},
   journals: journalMappings,
-  "gmg-srd": itemMappings,
+  "gmg-srd": itemFeatsMappings,
   // "action-macros": {},
   // "pf2e-macros": {},
-  "bestiary-ability-glossary-srd": itemMappings,
-  "bestiary-family-ability-glossary": itemMappings,
-  "adventure-specific-actions": itemMappings,
+  "bestiary-ability-glossary-srd": itemFeatsMappings,
+  "bestiary-family-ability-glossary": itemFeatsMappings,
+  "adventure-specific-actions": itemFeatsMappings,
 };
