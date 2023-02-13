@@ -51,6 +51,35 @@ Hooks.once("ready", () => {
     },
     "WRAPPER"
   );
+
+  // Automated animations
+  if (game.modules.has("autoanimations")) {
+    Hooks.on(
+      "AutomatedAnimations-WorkflowStart",
+      (data: any, animationData: any) => {
+        if (animationData) return;
+
+        let changed = false;
+
+        if (data.item && data.item.flags.babele.originalName) {
+          data.item.name = data.item.flags.babele.originalName;
+          changed = true;
+        }
+        if (data.ammoItem && data.ammoItem.flags.babele.originalName) {
+          data.ammoItem.name = data.ammoItem.flags.babele.originalName;
+          changed = true;
+        }
+        if (data.originalItem && data.originalItem.flags.babele.originalName) {
+          data.originalItem.name = data.originalItem.flags.babele.originalName;
+          changed = true;
+        }
+
+        if (changed) {
+          data.recheckAnimation = true;
+        }
+      }
+    );
+  }
 });
 
 Hooks.once("i18nInit", () => {
