@@ -55,16 +55,6 @@ export function round(num: number) {
   return Math.round((num + Number.EPSILON) * 100) / 100;
 }
 
-type MergeOptions = {
-  insertKeys: boolean;
-  insertValues: boolean;
-  overwrite: boolean;
-  recursive: boolean;
-  inplace: boolean;
-  enforceTypes: boolean;
-  performDeletions: boolean;
-};
-
 export function removeMismatchingTypes(fallback: any, other: any = {}) {
   for (let k of Object.keys(other)) {
     const replacement = other[k];
@@ -89,43 +79,4 @@ export function removeMismatchingTypes(fallback: any, other: any = {}) {
   }
 
   return fallback;
-}
-
-type MergeInsertContext = Pick<
-  MergeOptions,
-  "insertKeys" | "insertValues" | "performDeletions"
->;
-
-function _mergeInsert(
-  original: any,
-  k: string,
-  v: any,
-  {
-    insertKeys,
-    insertValues,
-    performDeletions,
-  }: Partial<MergeInsertContext> = {},
-  _d: number
-) {
-  // Delete a key
-  if (k.startsWith("-=") && performDeletions) {
-    delete original[k.slice(2)];
-    return;
-  }
-
-  const canInsert = (_d <= 1 && insertKeys) || (_d > 1 && insertValues);
-  if (!canInsert) return;
-
-  // Recursively create simple objects
-  if (v?.constructor === Object) {
-    original[k] = mergeObject({}, v, {
-      insertKeys: true,
-      inplace: true,
-      performDeletions,
-    });
-    return;
-  }
-
-  // Insert a key
-  original[k] = v;
 }
