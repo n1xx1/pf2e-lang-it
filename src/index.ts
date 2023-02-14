@@ -50,8 +50,7 @@ Hooks.once("ready", () => {
           data!.areaSize = convertFeet(data!.areaSize as number);
         }
         if (
-          stringId === "PF2E.Item.Spell.PlaceMeasuredTemplate" ||
-          stringId === "PF2E.TemplateLabel"
+          stringId === "PF2E.Item.Spell.PlaceMeasuredTemplate"
         ) {
           data!.size = convertFeet(data!.size as number);
         }
