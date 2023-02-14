@@ -45,8 +45,16 @@ Hooks.once("ready", () => {
       stringId: string,
       data?: Record<string, unknown>
     ): string => {
-      if (game.i18n.lang === "it" && stringId === "PF2E.SpellArea") {
-        data!.areaSize = convertFeet(data!.areaSize as number);
+      if (game.i18n.lang === "it") {
+        if (stringId === "PF2E.SpellArea") {
+          data!.areaSize = convertFeet(data!.areaSize as number);
+        }
+        if (
+          stringId === "PF2E.Item.Spell.PlaceMeasuredTemplate" ||
+          stringId === "PF2E.TemplateLabel"
+        ) {
+          data!.size = convertFeet(data!.size as number);
+        }
       }
       return wrapped(stringId, data);
     },
