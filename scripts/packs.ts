@@ -4,7 +4,7 @@ const ID = "pf2e-lang-it";
 
 const actorMappings: CompendiumMappingDefinition = {
   name: "name",
-  description: "system.description.value",
+  description: "system.details.publicNotes",
   items: {
     path: "items",
     converter: `${ID}-fromPack`,
