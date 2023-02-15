@@ -39,10 +39,14 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      - name: Update Manifest
+      - name: Get Versions
         run: |
           MODULE_VERSION=$(grep -oP '(?<="version": ")[^"]+' dist/module.json | tr -d '\n')
           echo "moduleVersion=$MODULE_VERSION" >> $GITHUB_ENV
+          SYSTEM_VERSION=$(cat sources/version.txt | tr -d '\n')
+          echo "systemVersion=$SYSTEM_VERSION" >> $GITHUB_ENV
+          MODULE_VERSION_PREFIX=$(echo $MODULE_VERSION | grep -oP '^\d+\.\d+')
+          echo "moduleVersionPrefix=$MODULE_VERSION_PREFIX" >> $GITHUB_ENV
 
       - name: Zip Files
         working-directory: ./dist
@@ -53,9 +57,13 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           name: ${{ env.moduleVersion }}
+          body: |
+            For PF2e System version ${{ env.systemVersion }}.
+            Module Version: ${{ env.moduleVersion }}
+            Tag: ${{ env.moduleVersionPrefix }}.$GITHUB_RUN_NUMBER
           allowUpdates: false
           draft: false
           prerelease: false
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: "./dist/module.json,./dist/module.zip"
-          tag: ${{ env.moduleVersion }}
+          tag: ${{ env.moduleVersionPrefix }}.$GITHUB_RUN_NUMBER
