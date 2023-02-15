@@ -58,9 +58,9 @@ jobs:
         with:
           name: ${{ env.moduleVersion }}
           body: |
-            For PF2e System version ${{ env.systemVersion }}.
-            Module Version: ${{ env.moduleVersion }}
-            Tag: ${{ env.moduleVersionPrefix }}.${{ github.run_number }}
+            PF2e System version `${{ env.systemVersion }}`.
+            Module Version: `${{ env.moduleVersion }}`.
+            Tag: `${{ env.moduleVersionPrefix }}.${{ github.run_number }}`.
           allowUpdates: false
           draft: false
           prerelease: false
