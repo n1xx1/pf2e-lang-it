@@ -60,10 +60,10 @@ jobs:
           body: |
             For PF2e System version ${{ env.systemVersion }}.
             Module Version: ${{ env.moduleVersion }}
-            Tag: ${{ env.moduleVersionPrefix }}.$GITHUB_RUN_NUMBER
+            Tag: ${{ env.moduleVersionPrefix }}.${{ github.run_number }}
           allowUpdates: false
           draft: false
           prerelease: false
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: "./dist/module.json,./dist/module.zip"
-          tag: ${{ env.moduleVersionPrefix }}.$GITHUB_RUN_NUMBER
+          tag: ${{ env.moduleVersionPrefix }}.${{ github.run_number }}
