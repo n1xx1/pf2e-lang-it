@@ -1,3 +1,4 @@
+import type { Translations } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/client/apps/i18n";
 import { compatAutoanimations } from "./compat/autoanimations";
 import { fromPackPf2 } from "./converter-from-pack";
 import { otherSpeedsPf2, speedPf2 } from "./converter-speeds";
@@ -49,9 +50,7 @@ Hooks.once("ready", () => {
         if (stringId === "PF2E.SpellArea") {
           data!.areaSize = convertFeet(data!.areaSize as number);
         }
-        if (
-          stringId === "PF2E.Item.Spell.PlaceMeasuredTemplate"
-        ) {
+        if (stringId === "PF2E.Item.Spell.PlaceMeasuredTemplate") {
           data!.size = convertFeet(data!.size as number);
         }
       }
@@ -64,8 +63,11 @@ Hooks.once("ready", () => {
 });
 
 Hooks.once("i18nInit", () => {
-  removeMismatchingTypes((game.i18n as any)._fallback, game.i18n.translations);
-  generateSpellcastingEntryTitles((game.i18n as any)._fallback);
+  if (game.i18n.lang === "it") {
+    const fallback: Translations = (game.i18n as any)._fallback;
+    removeMismatchingTypes(fallback, game.i18n.translations);
+    generateSpellcastingEntryTitles(fallback);
+  }
 });
 
 Hooks.once("babele.ready", () => {
