@@ -15,7 +15,7 @@ async function main() {
   const githubRepository = process.env.GITHUB_REPOSITORY;
 
   const { stdout } = await exec(
-    `git log ${lastReleaseTag}..HEAD  --pretty="%cn---separator---%s---separator---%H"`
+    `git log ${lastReleaseTag}..HEAD  --pretty="%s---separator---%H"`
   );
 
   const lines = stdout
@@ -23,8 +23,8 @@ async function main() {
     .split(/[\n\r]+/g)
     .map((line) => line.split(/---separator---/g))
     .map(
-      ([author, message, hash]) =>
-        `* ${message} by @${author} in ${githubBase}/${githubRepository}/commit/${hash}`
+      ([message, hash]) =>
+        `* ${message} [<${githubBase}/${githubRepository}/commit/${hash}>]`
     );
 
   const body = `
