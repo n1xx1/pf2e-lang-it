@@ -36,34 +36,45 @@ jobs:
       - name: Install pnpm Deps
         run: pnpm install
 
+      - name: Build Scripts
+        run: pnpm run build:scripts
+
       - name: Build
         run: pnpm run build
 
+      - id: release
+        uses: pozetroninc/github-action-get-latest-release@v0.7.0
+        with:
+          repository: ${{ github.repository }}
+
       - name: Get Versions
         run: |
-          MODULE_VERSION=$(grep -oP '(?<="version": ")[^"]+' dist/module.json | tr -d '\n')
-          echo "moduleVersion=$MODULE_VERSION" >> $GITHUB_ENV
-          SYSTEM_VERSION=$(cat sources/version.txt | tr -d '\n')
-          echo "systemVersion=$SYSTEM_VERSION" >> $GITHUB_ENV
-          MODULE_VERSION_PREFIX=$(echo $MODULE_VERSION | grep -oP '^\d+\.\d+')
-          echo "moduleVersionPrefix=$MODULE_VERSION_PREFIX" >> $GITHUB_ENV
+          moduleVersion=$(grep -oP '(?<="version": ")[^"]+' dist/module.json | tr -d '\n')
+          systemVersion=$(cat sources/version.txt | tr -d '\n')
+          moduleVersionPrefix=$(echo $moduleVersion | grep -oP '^\d+\.\d+')
+
+          echo "MODULE_VERSION=$moduleVersion" >> $GITHUB_ENV
+          echo "MODULE_VERSION_PREFIX=$moduleVersionPrefix" >> $GITHUB_ENV
+          echo "SYSTEM_VERSION=$systemVersion" >> $GITHUB_ENV
+          echo "RELEASE_TAG=${moduleVersionPrefix}.${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
+          echo "LAST_RELEASE_TAG=${{ steps.release.outputs.release }}" >> $GITHUB_ENV
 
       - name: Zip Files
         working-directory: ./dist
         run: zip -r ./module.zip ./*
 
+      - name: Release Notes
+        run: pnpm run release-notes
+
       - name: Create Version Release
         id: create_version_release
         uses: ncipollo/release-action@v1
         with:
-          name: ${{ env.moduleVersion }}
-          body: |
-            * PF2e System Version: `${{ env.systemVersion }}`
-            * Module Version: `${{ env.moduleVersion }}`
-            * Tag: `${{ env.moduleVersionPrefix }}.${{ github.run_number }}`
+          name: ${{ env.MODULE_VERSION }}
+          bodyFile: ./dist/release.md
           allowUpdates: false
           draft: false
           prerelease: false
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: "./dist/module.json,./dist/module.zip"
-          tag: ${{ env.moduleVersionPrefix }}.${{ github.run_number }}
+          tag: ${{ env.RELEASE_TAG }}

@@ -3,8 +3,9 @@
   "private": "true",
   "type": "module",
   "scripts": {
-    "build:scripts": "esbuild scripts/build.ts --bundle --outdir=tmp --platform=node --format=esm --external:esbuild",
-    "build": "pnpm run build:scripts && node tmp/build.js"
+    "build:scripts": "esbuild scripts/build.ts scripts/release-notes.ts --bundle --outdir=tmp --platform=node --format=esm --external:esbuild",
+    "build": "node tmp/build.js",
+    "release-notes": "node tmp/release-notes.js"
   },
   "devDependencies": {
     "@league-of-foundry-developers/foundry-vtt-types": "^9.280.0",
