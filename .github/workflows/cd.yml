@@ -14,10 +14,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: "recursive"
-
-      - name: Checkout History
-        uses: actions/checkout@v3
-        with:
           fetch-depth: 0
 
       - name: Setup pnpm
@@ -71,6 +67,8 @@ jobs:
 
       - name: Release Notes
         run: pnpm run release-notes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Version Release
         id: create_version_release

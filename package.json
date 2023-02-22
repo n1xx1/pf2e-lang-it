@@ -3,12 +3,13 @@
   "private": "true",
   "type": "module",
   "scripts": {
-    "build:scripts": "esbuild scripts/build.ts scripts/release-notes.ts --bundle --outdir=tmp --platform=node --format=esm --external:esbuild",
+    "build:scripts": "esbuild scripts/build.ts scripts/release-notes.ts --bundle --outdir=tmp --platform=node --format=esm --external:./node_modules/*",
     "build": "node tmp/build.js",
     "release-notes": "node tmp/release-notes.js"
   },
   "devDependencies": {
     "@league-of-foundry-developers/foundry-vtt-types": "^9.280.0",
+    "@octokit/core": "^4.2.0",
     "@types/node": "^18.11.18",
     "esbuild": "^0.17.2"
   }
