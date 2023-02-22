@@ -35,11 +35,9 @@ async function main() {
 
   const translationChanges = (
     await getSourcesAuthors(git, lastSourcesHash, sourcesHash)
-  )
-    .filter((a) => a.author !== "@weblate")
-    .map((a) => {
-      return `* ${a.changes} changes by ${a.author}`;
-    });
+  ).map((a) => {
+    return `* ${a.changes} changes by ${a.author}`;
+  });
 
   const body = `
 # Information
