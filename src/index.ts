@@ -1,18 +1,22 @@
 import type { Translations } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/client/apps/i18n";
 import { compatAutoanimations } from "./compat/autoanimations";
+import { distancePf2 } from "./converter-distance";
 import { fromPackPf2 } from "./converter-from-pack";
+import { rangePf2 } from "./converter-range";
 import { otherSpeedsPf2, speedPf2 } from "./converter-speeds";
+import { timePf2 } from "./converter-time";
 import { libWrapper } from "./libwrapper";
 import { generateSpellcastingEntryTitles } from "./spellcasting-entry";
-import {
-  convertFeet,
-  convertFeetString,
-  convertMilesString,
-  removeMismatchingTypes,
-} from "./utils";
+import { convertFeet, removeMismatchingTypes } from "./utils";
 
+const LANG = "it";
 const ID = "pf2e-lang-it";
-const convertEnabled = true;
+
+const convertEnabled = false;
+
+export function shouldConvertUnits() {
+  return convertEnabled && game.i18n.lang === LANG;
+}
 
 Hooks.once("init", () => {
   if (typeof Babele === "undefined") {
@@ -21,7 +25,7 @@ Hooks.once("init", () => {
 
   Babele.get().register({
     module: ID,
-    lang: "it",
+    lang: LANG,
     dir: "lang/compendiums",
   });
 
@@ -46,7 +50,7 @@ Hooks.once("ready", () => {
       stringId: string,
       data?: Record<string, unknown>
     ): string => {
-      if (game.i18n.lang === "it") {
+      if (shouldConvertUnits()) {
         if (stringId === "PF2E.SpellArea") {
           data!.areaSize = convertFeet(data!.areaSize as number);
         }
@@ -63,7 +67,7 @@ Hooks.once("ready", () => {
 });
 
 Hooks.once("i18nInit", () => {
-  if (game.i18n.lang === "it") {
+  if (game.i18n.lang === LANG) {
     const fallback: Translations = (game.i18n as any)._fallback;
     removeMismatchingTypes(fallback, game.i18n.translations);
     generateSpellcastingEntryTitles(fallback);
@@ -93,68 +97,4 @@ function listPf2(
     }
     return { value: t };
   });
-}
-
-const allowedTimes = ["1", "2", "3", "free", "reaction"];
-
-function timePf2(time: string | number | null, translation?: string) {
-  if (!time || !convertEnabled) return time;
-  if (translation) {
-    return translation;
-  }
-  if (typeof time !== "string") {
-    return time;
-  }
-  time = time.toLowerCase();
-  if (allowedTimes.includes(time)) {
-    return time;
-  }
-  const match = time.match(/^([\d.,]+)\s*(minutes?|days?|hours?)$/);
-  if (match) {
-    const [timeStr, type] = match;
-    if (type.startsWith("minute")) {
-      return `${timeStr} minut${type.endsWith("s") ? "i" : "o"}`;
-    }
-    if (type.startsWith("hour")) {
-      return `${timeStr} or${type.endsWith("s") ? "e" : "a"}`;
-    }
-    if (type.startsWith("day")) {
-      return `${timeStr} giorn${type.endsWith("s") ? "i" : "o"}`;
-    }
-  }
-  return time;
-}
-
-function rangePf2(range: string | null | undefined, translation?: string) {
-  if (!range || !convertEnabled) {
-    return range;
-  }
-  if (translation) {
-    return translation;
-  }
-  range = range.toLowerCase();
-  if (range === "touch") {
-    return "contatto";
-  }
-  if (range === "planetary") {
-    return "planetario";
-  }
-  const match = range.match(/^([\d.,]+)\s*(|feet|foot|miles?)$/);
-  if (match) {
-    const [rangeStr, type] = match;
-    if (!type || type === "feet" || type === "foot") {
-      return `${convertFeetString(rangeStr)} metri`;
-    }
-    if (type.startsWith(" mile")) {
-      return `${convertMilesString(rangeStr)} miglia`;
-    }
-  }
-}
-
-function distancePf2(distance: number | string) {
-  if (!distance || !convertEnabled) {
-    return distance;
-  }
-  const num = typeof distance === "string" ? parseInt(distance) : distance;
-  return convertFeet(num);
 }
