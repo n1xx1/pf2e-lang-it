@@ -1,3 +1,4 @@
+import { shouldConvertUnits } from ".";
 import { Converter } from "./babele";
 import { convertFeet } from "./utils";
 
@@ -6,6 +7,7 @@ type Pf2Speed = {
   details: string;
   otherSpeeds: Pf2OtherSpeed[];
 };
+
 type Pf2OtherSpeed = {
   type: string;
   value: number;
@@ -22,10 +24,10 @@ export const speedPf2: Converter<Pf2Speed | undefined | null> = (
   return {
     ...speed,
     details: translation || speed.details,
-    value: convertFeet(speed.value),
+    value: shouldConvertUnits() ? convertFeet(speed.value) : speed.value,
     otherSpeeds: speed.otherSpeeds.map((s) => ({
       ...s,
-      value: convertFeet(speed.value),
+      value: shouldConvertUnits() ? convertFeet(speed.value) : speed.value,
     })),
   };
 };
