@@ -1,11 +1,11 @@
 {
   "id": "pf2e-lang-it",
   "title": "Italian [Pathfinder 2e]",
-  "version": "4.12.6.3",
+  "version": "5.2.2.1",
   "compatibility": {
-    "minimum": "10",
-    "verified": "10.291",
-    "maximum": "10.999"
+    "minimum": "11.306",
+    "verified": "11",
+    "maximum": "11.999"
   },
   "authors": [{ "name": "n1xx1" }],
   "description": "",
@@ -22,8 +22,8 @@
         "id": "pf2e",
         "type": "system",
         "compatibility": {
-          "minimum": "4.12.0",
-          "verified": "4.12.6"
+          "minimum": "5.2.2",
+          "verified": "5.2.2"
         }
       }
     ],
