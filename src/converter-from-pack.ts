@@ -12,52 +12,64 @@ function getTranslationForItem(data: any, translations: any) {
   }
 }
 
+const sourceIdRegex =
+  /^Compendium\.(?<namespace>[^\.]+)\.(?<compendium>[^\.]+)\.(?<type>Actor|Item|RollTable|JournalEntry|Macro|Item)\.(?<id>[^\.]+)(?:\.Item\.(?<itemId>[^\.]+))?$/;
+
 // parse a sourceId reference (supports sub-items) and
 // return the matching translation and mapping
 function findTranslationSource(
   sourceId: string
 ): null | [any, CompendiumMapping] {
-  const m = sourceId.match(
-    /^Compendium\.pf2e\.([^\.]+).([^\.]+)(?:\.Item\.([^\.]+))?$/
-  );
-  if (m) {
-    const [_, packName, id, itemId] = m;
-    const pack = game.babele.packs.get(`pf2e.${packName}`);
-    if (!pack) {
-      return null;
-    }
-
-    const foundryPack = game.packs.get(`pf2e.${packName}`)!;
-    const referenced = foundryPack!.index.get(id)!;
-    const referencedName = (referenced as any).originalName ?? referenced.name;
-    const referencedTranslation = pack.translationsFor({
-      _id: id,
-      name: referencedName,
-    });
-
-    if (!itemId) {
-      return [referencedTranslation, pack.mapping];
-    }
-
-    if (referencedTranslation?.items) {
-      // try get the real item... will probably fail.
-      // TODO: make it work with foundryPack.getDocument(id)
-
-      const items: any[] = (foundryPack.get(id) as any)?.items;
-      if (!items) {
-        return null;
-      }
-      const name = items?.find((item: any) => item._id == itemId);
-      return [
-        getTranslationForItem(
-          { _id: itemId, name },
-          referencedTranslation.items
-        ),
-        dynamicMapping,
-      ];
-    }
+  const m = sourceId.match(sourceIdRegex);
+  if (!m) {
+    return null;
   }
-  return null;
+
+  const { namespace, compendium, id, itemId } = m.groups as Record<
+    string,
+    string
+  >;
+  const pack = game.babele.packs.get(`${namespace}.${compendium}`);
+  if (!pack) {
+    return null;
+  }
+
+  const foundryPack = game.packs.get(`${namespace}.${compendium}`)!;
+  if (!foundryPack) {
+    return null;
+  }
+
+  const referenced = foundryPack.index.get(id);
+  if (!referenced) {
+    return null;
+  }
+
+  const referencedName = (referenced as any).originalName ?? referenced.name;
+  const referencedTranslation = pack.translationsFor({
+    _id: id,
+    name: referencedName,
+  });
+
+  if (!itemId) {
+    return [referencedTranslation, pack.mapping];
+  }
+
+  if (!referencedTranslation?.items) {
+    return null;
+  }
+
+  // try get the real item... will probably fail.
+  // TODO: make it work with foundryPack.getDocument(id)
+  const items: any[] = (foundryPack.get(id) as any)?.items;
+  if (!items) {
+    return null;
+  }
+
+  const name = items?.find((item: any) => item._id == itemId);
+  return [
+    getTranslationForItem({ _id: itemId, name }, referencedTranslation.items),
+    dynamicMapping,
+  ];
 }
 
 export const fromPackPf2: Converter<any[]> = (items, translations) => {
@@ -70,7 +82,7 @@ export const fromPackPf2: Converter<any[]> = (items, translations) => {
       if (translation) {
         const { _source, ...rest } = translation;
         translationData = dynamicMapping.map(data, rest);
-        translationSource = _source ? `Compendium.pf2e.${_source}` : null;
+        translationSource = _source ? `Compendium.${_source}` : null;
       }
     }
 
@@ -84,9 +96,7 @@ export const fromPackPf2: Converter<any[]> = (items, translations) => {
           translationData
         );
       }
-    }
-
-    if (!sourceId && (data.type === "melee" || data.type === "ranged")) {
+    } else if (data.type === "melee" || data.type === "ranged") {
       // find from equipment-srd
       const equipmentTranslation = game.babele.packs
         .get("pf2e.equipment-srd")!
@@ -98,9 +108,7 @@ export const fromPackPf2: Converter<any[]> = (items, translations) => {
           inplace: false,
         })
       );
-    }
-
-    if (data.type === "spellcastingEntry") {
+    } else if (data.type === "spellcastingEntry") {
       const spellcastingEntryName = spellcastingEntries[data.name];
       if (spellcastingEntryName) {
         translationData = { name: spellcastingEntryName };
