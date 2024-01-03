@@ -50,12 +50,15 @@ Hooks.once("ready", () => {
       stringId: string,
       data?: Record<string, unknown>
     ): string => {
-      if (shouldConvertUnits()) {
-        if (stringId === "PF2E.SpellArea") {
-          data!.areaSize = convertFeet(data!.areaSize as number);
-        }
-        if (stringId === "PF2E.Item.Spell.PlaceMeasuredTemplate") {
+      if (game.i18n.lang === LANG) {
+        if (stringId === "PF2E.Item.Spell.Area") {
           data!.size = convertFeet(data!.size as number);
+        }
+        if (stringId === "PF2E.Action.Range.IncrementN") {
+          data!.n = convertFeet(data!.n as number);
+        }
+        if (stringId === "PF2E.Action.Range.MaxN") {
+          data!.n = convertFeet(data!.n as number);
         }
       }
       return wrapped(stringId, data);
