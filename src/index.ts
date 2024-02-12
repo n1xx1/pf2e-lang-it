@@ -48,7 +48,7 @@ Hooks.once("ready", () => {
     (
       wrapped: typeof game.i18n.format,
       stringId: string,
-      data?: Record<string, unknown>
+      data?: Record<string, unknown>,
     ): string => {
       if (game.i18n.lang === LANG) {
         if (stringId === "PF2E.Item.Spell.Area") {
@@ -60,10 +60,16 @@ Hooks.once("ready", () => {
         if (stringId === "PF2E.Action.Range.MaxN") {
           data!.n = convertFeet(data!.n as number);
         }
+        if (stringId === "PF2E.Actor.Creature.Sense.WithRange") {
+          data!.range = convertFeet(data!.range as number);
+        }
+        if (stringId === "PF2E.Actor.Creature.Sense.WithAcuityAndRange") {
+          data!.range = convertFeet(data!.range as number);
+        }
       }
       return wrapped(stringId, data);
     },
-    "WRAPPER"
+    "WRAPPER",
   );
 
   compatAutoanimations();
@@ -87,7 +93,7 @@ function heighteningPf2(value: any, translation?: any) {
 
 function listPf2(
   value: { value: string }[] | undefined,
-  translation?: Record<string, string>
+  translation?: Record<string, string>,
 ) {
   if (!value || !Array.isArray(value) || !translation) return value;
   return value.map((v, i) => {
