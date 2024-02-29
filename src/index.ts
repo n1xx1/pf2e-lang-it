@@ -8,9 +8,10 @@ import { timePf2 } from "./converter-time";
 import { libWrapper } from "./libwrapper";
 import { generateSpellcastingEntryTitles } from "./spellcasting-entry";
 import { convertFeet, removeMismatchingTypes } from "./utils";
+import { setupDamageRollExtension } from "./damage-roll-extension";
 
-const LANG = "it";
-const ID = "pf2e-lang-it";
+export const LANG = "it";
+export const ID = "pf2e-lang-it";
 
 const convertEnabled = false;
 
@@ -39,6 +40,8 @@ Hooks.once("init", () => {
     [`${ID}-otherSpeeds`]: otherSpeedsPf2,
     [`${ID}-heightening`]: heighteningPf2,
   });
+
+  setupDamageRollExtension();
 });
 
 Hooks.once("ready", () => {
