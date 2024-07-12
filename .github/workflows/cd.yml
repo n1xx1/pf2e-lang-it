@@ -43,12 +43,6 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      - id: release
-        uses: pozetroninc/github-action-get-latest-release@v0.7.0
-        with:
-          repository: ${{ github.repository }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Get Versions
         run: |
           moduleVersion=$(grep -oP '(?<="version": ")[^"]+' dist/module.json | tr -d '\n')
@@ -59,11 +53,21 @@ jobs:
           echo "MODULE_VERSION_PREFIX=$moduleVersionPrefix" >> $GITHUB_ENV
           echo "SYSTEM_VERSION=$systemVersion" >> $GITHUB_ENV
           echo "RELEASE_TAG=${moduleVersionPrefix}.${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
-          echo "LAST_RELEASE_TAG=${{ steps.release.outputs.release }}" >> $GITHUB_ENV
 
           if [[ $moduleVersion =~ "-" ]]; then
           echo "RELEASE_PRERELEASE=true" >> $GITHUB_ENV
           fi
+
+      - id: release
+        uses: pozetroninc/github-action-get-latest-release@v0.7.0
+        with:
+          repository: ${{ github.repository }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          excludes: ${{ env.RELEASE_PRERELEASE && '' || 'prerelease' }}
+
+      - name: Release Tag
+        run: |
+          echo "LAST_RELEASE_TAG=${{ steps.release.outputs.release }}" >> $GITHUB_ENV
 
       - name: Zip Files
         working-directory: ./dist
