@@ -47,6 +47,7 @@
     ]
   },
   "esmodules": ["module.js"],
-  "system": ["pf2e"],
+  "scripts": [],
+  "packFolders": [],
   "packs": []
 }

@@ -31,12 +31,21 @@ const distModuleJson = pathJoin(outdir, "module.json");
 
 const repoName = process.env.GITHUB_REPOSITORY ?? "n1xx1/pf2e-lang-it";
 
-await copyJsonFile(moduleJson, distModuleJson, (json) => ({
-  ...json,
-  url: `https://github.com/${repoName}`,
-  manifest: `https://github.com/${repoName}/releases/latest/download/module.json`,
-  download: `https://github.com/${repoName}/releases/latest/download/module.zip`,
-}));
+await copyJsonFile(moduleJson, distModuleJson, (json) => {
+  let releaseTag = "latest";
+  if (process.env.GITHUB_RUN_NUMBER) {
+    const prefix = (json.version as string).match(/^\d+\.\d+/);
+    if (prefix) {
+      releaseTag = `${prefix[0]}.${process.env.GITHUB_RUN_NUMBER}`;
+    }
+  }
+  return {
+    ...json,
+    url: `https://github.com/${repoName}`,
+    manifest: `https://github.com/${repoName}/releases/latest/download/module.json`,
+    download: `https://github.com/${repoName}/releases/${releaseTag}/download/module.zip`,
+  };
+});
 
 // translation files
 
@@ -75,13 +84,15 @@ type BabeleCompendium = {
 };
 
 type AnyJson = Record<string, unknown>;
+type MaybePromise<T> = Promise<T> | T;
 
 async function copyJsonFile<T1 = AnyJson>(
   source: string,
   output: string,
-  transformer: (x: T1) => AnyJson | null | undefined = (x) => x as AnyJson
+  transformer: (x: T1) => MaybePromise<AnyJson | null | undefined> = (x) =>
+    x as AnyJson
 ) {
-  const transformed = transformer(await readFileJson(source));
+  const transformed = await transformer(await readFileJson(source));
   if (!transformed) return;
   await writeFileJson(output, transformed);
 }
