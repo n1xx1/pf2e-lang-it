@@ -32,18 +32,18 @@ const distModuleJson = pathJoin(outdir, "module.json");
 const repoName = process.env.GITHUB_REPOSITORY ?? "n1xx1/pf2e-lang-it";
 
 await copyJsonFile(moduleJson, distModuleJson, (json) => {
-  let releaseTag = "latest";
+  let downloadPath = "latest/download";
   if (process.env.GITHUB_RUN_NUMBER) {
     const prefix = (json.version as string).match(/^\d+\.\d+/);
     if (prefix) {
-      releaseTag = `${prefix[0]}.${process.env.GITHUB_RUN_NUMBER}`;
+      downloadPath = `download/${prefix[0]}.${process.env.GITHUB_RUN_NUMBER}`;
     }
   }
   return {
     ...json,
     url: `https://github.com/${repoName}`,
     manifest: `https://github.com/${repoName}/releases/latest/download/module.json`,
-    download: `https://github.com/${repoName}/releases/${releaseTag}/download/module.zip`,
+    download: `https://github.com/${repoName}/releases/${downloadPath}/module.zip`,
   };
 });
 
