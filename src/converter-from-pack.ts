@@ -1,7 +1,13 @@
 import { Converter } from "./babele";
 import { spellcastingEntries } from "./spellcasting-entry";
 
-let dynamicMapping = new CompendiumMapping("Item");
+let dynamicMapping: CompendiumMapping | null = null;
+
+export function hackCompendiumMappingClass() {
+  const tc = game.babele.packs.contents[0];
+  const CompendiumMapping: any = tc.mapping.constructor;
+  dynamicMapping = new CompendiumMapping("Item");
+}
 
 // translations can be either an array of translations or an object
 function getTranslationForItem(data: any, translations: any) {
@@ -68,7 +74,7 @@ function findTranslationSource(
   const name = items?.find((item: any) => item._id == itemId);
   return [
     getTranslationForItem({ _id: itemId, name }, referencedTranslation.items),
-    dynamicMapping,
+    dynamicMapping!,
   ];
 }
 
@@ -81,7 +87,7 @@ export const fromPackPf2: Converter<any[]> = (items, translations) => {
       const translation = getTranslationForItem(data, translations);
       if (translation) {
         const { _source, ...rest } = translation;
-        translationData = dynamicMapping.map(data, rest);
+        translationData = dynamicMapping!.map(data, rest);
         translationSource = _source ? `Compendium.${_source}` : null;
       }
     }
@@ -102,7 +108,7 @@ export const fromPackPf2: Converter<any[]> = (items, translations) => {
         .get("pf2e.equipment-srd")!
         .translationsFor({ _id: "", name: data.name });
 
-      translationData = dynamicMapping.map(
+      translationData = dynamicMapping!.map(
         data,
         mergeObject(equipmentTranslation, translationData ?? {}, {
           inplace: false,

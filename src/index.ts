@@ -1,7 +1,7 @@
 import type { Translations } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/client/apps/i18n";
 import { compatAutoanimations } from "./compat/autoanimations";
 import { distancePf2 } from "./converter-distance";
-import { fromPackPf2 } from "./converter-from-pack";
+import { fromPackPf2, hackCompendiumMappingClass } from "./converter-from-pack";
 import { rangePf2 } from "./converter-range";
 import { otherSpeedsPf2, speedPf2 } from "./converter-speeds";
 import { timePf2 } from "./converter-time";
@@ -87,6 +87,7 @@ Hooks.once("i18nInit", () => {
 });
 
 Hooks.once("babele.ready", () => {
+  hackCompendiumMappingClass();
   game.pf2e.ConditionManager.initialize();
 });
 
