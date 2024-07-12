@@ -20,17 +20,17 @@ export function shouldConvertUnits() {
 }
 
 Hooks.once("init", () => {
-  if (typeof Babele === "undefined") {
+  if (!game.babele) {
     return;
   }
 
-  Babele.get().register({
+  game.babele.register({
     module: ID,
     lang: LANG,
     dir: "lang/compendiums",
   });
 
-  Babele.get().registerConverters({
+  game.babele.registerConverters({
     [`${ID}-fromPack`]: fromPackPf2,
     [`${ID}-range`]: rangePf2,
     [`${ID}-time`]: timePf2,
