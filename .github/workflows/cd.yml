@@ -61,6 +61,10 @@ jobs:
           echo "RELEASE_TAG=${moduleVersionPrefix}.${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
           echo "LAST_RELEASE_TAG=${{ steps.release.outputs.release }}" >> $GITHUB_ENV
 
+          if [[ $moduleVersion =~ "-" ]]; then
+          echo "RELEASE_PRERELEASE=true" >> $GITHUB_ENV
+          fi
+
       - name: Zip Files
         working-directory: ./dist
         run: zip -r ./module.zip ./*
@@ -78,7 +82,7 @@ jobs:
           bodyFile: ./dist/release.md
           allowUpdates: false
           draft: false
-          prerelease: false
+          prerelease: ${{ env.RELEASE_PRERELEASE }}
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: "./dist/module.json,./dist/module.zip"
           tag: ${{ env.RELEASE_TAG }}
