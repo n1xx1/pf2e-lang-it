@@ -25,13 +25,13 @@ async function main() {
   const sourcesHash = await getCurrentSourcesHash();
   const lastSourcesHash = await getLastSourcesHash(git, lastReleaseTag);
 
-  const moduleChanges = (await getChanges(git, lastReleaseTag, "HEAD")).map(
-    (c) => {
+  const moduleChanges = (await getChanges(git, lastReleaseTag, "HEAD"))
+    .filter(includeCommit)
+    .map((c) => {
       const link = `<${repoUrl}/commit/${c.hash}>`;
       const by = c.author ? ` by ${c.author}` : "";
       return `* ${c.message} [${link}${by}]`;
-    }
-  );
+    });
 
   const translationChanges = (
     await getSourcesAuthors(git, lastSourcesHash, sourcesHash)
@@ -60,9 +60,16 @@ ${translationChanges.join("\n")}
   await writeFile("./dist/release.md", body + "\n");
 }
 
+function includeCommit(c: Awaited<ReturnType<typeof getChanges>>[0]) {
+  if (c.message.startsWith("🔖") || c.message.startsWith(":bookmark:")) {
+    return false;
+  }
+  return true;
+}
+
 async function getCurrentSourcesHash() {
   const { stdout } = await exec(
-    `git ls-tree HEAD sources --format="%(objectname)"`
+    `git ls-tree HEAD sources --format="%(objectname)"`,
   );
   return stdout.trim();
 }
@@ -75,7 +82,7 @@ async function getLastSourcesHash(git: Octokit, lastReleaseTag: string) {
       repo: "pf2e-lang-it",
       path: "sources",
       ref: lastReleaseTag,
-    }
+    },
   );
   if (
     Array.isArray(lastSubmoduleHashData) ||
@@ -93,7 +100,7 @@ async function gitGetSourcesCommit(git: Octokit, ref: string) {
       owner: githubSourcesOwner,
       repo: githubSourcesRepo,
       ref,
-    }
+    },
   );
   return data;
 }
@@ -105,14 +112,14 @@ async function gitGetCommit(git: Octokit, ref: string) {
       owner: githubOwner,
       repo: githubRepo,
       ref,
-    }
+    },
   );
   return data;
 }
 
 function getHandle(
   commit: Awaited<ReturnType<typeof gitGetCommit>>,
-  base?: string
+  base?: string,
 ) {
   if (commit.author?.login) {
     return `@${commit.author.login}`;
@@ -125,7 +132,7 @@ function getHandle(
 
 async function getChanges(git: Octokit, refFrom: string, refTo: string) {
   let { stdout, stderr } = await exec(
-    `git log ${refFrom}..${refTo} --format="%s----%H----%an"`
+    `git log ${refFrom}..${refTo} --format="%s----%H----%an"`,
   );
 
   const commits = stdout
@@ -141,14 +148,14 @@ async function getChanges(git: Octokit, refFrom: string, refTo: string) {
         ...c,
         author: getHandle(commit, c.author),
       };
-    })
+    }),
   );
 }
 
 async function getSourcesAuthors(git: Octokit, refFrom: string, refTo: string) {
   let { stdout, stderr } = await exec(
     `git log ${refFrom}..${refTo} --format="%an----%H----%s" -- trad/it`,
-    { cwd: path.resolve("./sources") }
+    { cwd: path.resolve("./sources") },
   );
   stdout = stdout.trim();
   if (stdout.length === 0) return [];
@@ -161,14 +168,14 @@ async function getSourcesAuthors(git: Octokit, refFrom: string, refTo: string) {
       .map(async (c) => {
         const commit = await gitGetSourcesCommit(git, c.hash);
         return { ...c, author: getHandle(commit, c.author), data: commit };
-      })
+      }),
   );
 
   return [...groupBy(commits, (c) => c.author).entries()].map(
     ([author, commits]) => ({
       author,
       changes: commits.reduce((p, c) => p + (c.data.stats?.total ?? 0), 0),
-    })
+    }),
   );
 }
 
