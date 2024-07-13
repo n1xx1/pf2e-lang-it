@@ -1,13 +1,16 @@
 # Traduzione Non Ufficiale del Sistema Pathfinder 2e per FoundryVTT
 
+[![Translation status](https://weblate.n1xx1.me/widget/foundryvtt-pathfinder-2e/-/it/svg-badge.svg)](https://weblate.n1xx1.me/engage/foundryvtt-pathfinder-2e/-/it/)
+
 ## Licenze
 
 I contenuti di questo modulo sono sotto le seguenti licenze:
 
 - [Paizo Inc. Community Use Policy](https://paizo.com/community/communityuse).
 
-- [OPEN GAME LICENSE Version 1.0a](https://opengamingfoundation.org/ogl.html),
-  per tutte le meccaniche e informazioni.
+- [OPEN GAME LICENSE Version 1.0a](https://opengamingfoundation.org/ogl.html)
+
+- [Open RPG Creative License](https://www.chaosium.com/content/orclicense/ORC_License_FINAL.pdf)
 
 - [Limited License Agreement for module development 09/02/2020](https://foundryvtt.com/article/license/).
 
