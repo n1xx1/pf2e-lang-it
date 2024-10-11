@@ -3,6 +3,7 @@
   "private": "true",
   "type": "module",
   "scripts": {
+    "exec": "cd sources && pnpm run exec -d ../../pf2e",
     "build:scripts": "esbuild scripts/build.ts scripts/release-notes.ts --bundle --outdir=tmp --platform=node --format=esm --external:./node_modules/*",
     "build": "node tmp/build.js",
     "release-notes": "node tmp/release-notes.js"
@@ -12,5 +13,6 @@
     "@octokit/core": "^4.2.0",
     "@types/node": "^18.11.18",
     "esbuild": "^0.17.2"
-  }
+  },
+  "packageManager": "pnpm@9.5.0"
 }
