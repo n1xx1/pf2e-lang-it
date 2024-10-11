@@ -24,7 +24,7 @@ const sourceIdRegex =
 // parse a sourceId reference (supports sub-items) and
 // return the matching translation and mapping
 function findTranslationSource(
-  sourceId: string
+  sourceId: string,
 ): null | [any, CompendiumMapping] {
   const m = sourceId.match(sourceIdRegex);
   if (!m) {
@@ -92,14 +92,17 @@ export const fromPackPf2: Converter<any[]> = (items, translations) => {
       }
     }
 
-    const sourceId = translationSource ?? data.flags?.core?.sourceId;
+    const sourceId =
+      translationSource ??
+      data.flags?.core?.sourceId ??
+      data._stats?.compendiumSource;
     if (sourceId) {
       const found = findTranslationSource(sourceId);
       if (found) {
         const [translationData1, mapping] = found;
         translationData = mergeObject(
           mapping.map(data, translationData1),
-          translationData
+          translationData,
         );
       }
     } else if (data.type === "melee" || data.type === "ranged") {
@@ -112,7 +115,7 @@ export const fromPackPf2: Converter<any[]> = (items, translations) => {
         data,
         mergeObject(equipmentTranslation, translationData ?? {}, {
           inplace: false,
-        })
+        }),
       );
     } else if (data.type === "spellcastingEntry") {
       const spellcastingEntryName = spellcastingEntries[data.name];
@@ -139,9 +142,9 @@ export const fromPackPf2: Converter<any[]> = (items, translations) => {
             },
           },
         },
-        { inplace: false }
+        { inplace: false },
       ),
-      { inplace: false }
+      { inplace: false },
     );
   });
 };
