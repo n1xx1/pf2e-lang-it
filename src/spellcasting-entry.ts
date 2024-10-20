@@ -1,14 +1,5 @@
 import { formatWith, localizeWith } from "./utils";
 
-declare global {
-  interface CONFIG {
-    PF2E: {
-      preparationType: Record<string, string>;
-      magicTraditions: Record<string, string>;
-    };
-  }
-}
-
 export let spellcastingEntries: Record<string, string> = {};
 
 export function generateSpellcastingEntryTitles(en: any) {
@@ -30,7 +21,7 @@ export function generateSpellcastingEntryTitles(en: any) {
         {
           preparationType: translatedPrep,
           traditionSpells: translatedTrad,
-        }
+        },
       );
 
       spellcastingEntries[originalSpellcasting] = translatedSpellcasting;

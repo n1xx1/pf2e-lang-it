@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ES2022",
-    "moduleResolution": "node",
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["esnext", "dom", "dom.iterable"],
     "strict": true,
-    "types": ["@league-of-foundry-developers/foundry-vtt-types"]
+    "types": ["jquery", "node", "foundry-types"]
   },
   "include": ["src", "scripts"]
 }

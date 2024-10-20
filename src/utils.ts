@@ -23,7 +23,7 @@ export async function loadOriginalSystemLanguage() {
       } catch (e) {
         return {};
       }
-    })
+    }),
   );
   const trad: any = {};
   for (const lang of languages) {
@@ -58,7 +58,7 @@ export function round(num: number) {
 export function removeMismatchingTypes(fallback: any, other: any = {}) {
   for (let k of Object.keys(other)) {
     const replacement = other[k];
-    const replacementType = getType(replacement);
+    const replacementType = foundry.utils.getType(replacement);
 
     if (!fallback.hasOwnProperty(k)) {
       delete other[k];
@@ -66,7 +66,7 @@ export function removeMismatchingTypes(fallback: any, other: any = {}) {
     }
 
     const original = fallback[k];
-    const originalType = getType(original);
+    const originalType = foundry.utils.getType(original);
 
     if (replacementType === "Object" && originalType === "Object") {
       removeMismatchingTypes(original, replacement);

@@ -1,4 +1,3 @@
-import type { Translations } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/client/apps/i18n";
 import { compatAutoanimations } from "./compat/autoanimations";
 import { distancePf2 } from "./converter-distance";
 import { fromPackPf2, hackCompendiumMappingClass } from "./converter-from-pack";
@@ -51,7 +50,7 @@ Hooks.once("ready", () => {
     (
       wrapped: typeof game.i18n.format,
       stringId: string,
-      data?: Record<string, unknown>,
+      data?: { [key: string]: string | number | boolean | null },
     ): string => {
       if (game.i18n.lang === LANG) {
         if (stringId === "PF2E.Item.Spell.Area") {
@@ -80,9 +79,8 @@ Hooks.once("ready", () => {
 
 Hooks.once("i18nInit", () => {
   if (game.i18n.lang === LANG) {
-    const fallback: Translations = (game.i18n as any)._fallback;
-    removeMismatchingTypes(fallback, game.i18n.translations);
-    generateSpellcastingEntryTitles(fallback);
+    removeMismatchingTypes(game.i18n._fallback, game.i18n.translations);
+    generateSpellcastingEntryTitles(game.i18n._fallback);
   }
 });
 

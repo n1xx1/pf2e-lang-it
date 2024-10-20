@@ -1,5 +1,5 @@
-import { Converter } from "./babele";
 import { spellcastingEntries } from "./spellcasting-entry";
+import type { CompendiumMapping, BabeleConverter } from "./types";
 
 let dynamicMapping: CompendiumMapping | null = null;
 
@@ -78,7 +78,7 @@ function findTranslationSource(
   ];
 }
 
-export const fromPackPf2: Converter<any[]> = (items, translations) => {
+export const fromPackPf2: BabeleConverter<any[]> = (items, translations) => {
   return items.map((data) => {
     let translationData;
     let translationSource;
@@ -100,7 +100,7 @@ export const fromPackPf2: Converter<any[]> = (items, translations) => {
       const found = findTranslationSource(sourceId);
       if (found) {
         const [translationData1, mapping] = found;
-        translationData = mergeObject(
+        translationData = foundry.utils.mergeObject(
           mapping.map(data, translationData1),
           translationData,
         );
@@ -113,7 +113,7 @@ export const fromPackPf2: Converter<any[]> = (items, translations) => {
 
       translationData = dynamicMapping!.map(
         data,
-        mergeObject(equipmentTranslation, translationData ?? {}, {
+        foundry.utils.mergeObject(equipmentTranslation, translationData ?? {}, {
           inplace: false,
         }),
       );
@@ -128,9 +128,9 @@ export const fromPackPf2: Converter<any[]> = (items, translations) => {
       return data;
     }
 
-    return mergeObject(
+    return foundry.utils.mergeObject(
       data,
-      mergeObject(
+      foundry.utils.mergeObject(
         translationData,
         {
           translated: true,
