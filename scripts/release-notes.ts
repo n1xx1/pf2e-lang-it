@@ -124,9 +124,6 @@ function getHandle(
   if (commit.author?.login) {
     return `@${commit.author.login}`;
   }
-  if (commit.committer?.login) {
-    return `@${commit.committer.login}`;
-  }
   return base ?? "unknown";
 }
 
