@@ -33,11 +33,12 @@ async function main() {
       return `* ${c.message} [${link}${by}]`;
     });
 
+  const ignoredAuthors = ["Weblate", "@weblate"];
   const translationChanges = (
     await getSourcesAuthors(git, lastSourcesHash, sourcesHash)
-  ).map((a) => {
-    return `* ${a.changes} changes by ${a.author}`;
-  });
+  )
+    .filter((a) => !ignoredAuthors.includes(a.author))
+    .map((a) => `* ${a.changes} changes by ${a.author}`);
 
   const body = `
 # Information
