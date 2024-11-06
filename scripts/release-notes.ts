@@ -141,10 +141,7 @@ async function getChanges(git: Octokit, refFrom: string, refTo: string) {
   return await Promise.all(
     commits.map(async (c) => {
       const commit = await gitGetCommit(git, c.hash);
-      return {
-        ...c,
-        author: getHandle(commit, c.author),
-      };
+      return { ...c, author: getHandle(commit, c.author) };
     }),
   );
 }
