@@ -6,10 +6,10 @@
 // A shim for the libWrapper library
 export let libWrapper = undefined;
 
-export const VERSIONS = [1, 12, 2];
+export const VERSIONS = [1, 13, 0];
 export const TGT_SPLIT_RE = new RegExp(
   "([^.[]+|\\[('([^'\\\\]|\\\\.)+?'|\"([^\"\\\\]|\\\\.)+?\")\\])",
-  "g"
+  "g",
 );
 export const TGT_CLEANUP_RE = new RegExp("(^\\['|'\\]$|^\\[\"|\"\\]$)", "g");
 
@@ -36,13 +36,16 @@ Hooks.once("init", () => {
     static get OVERRIDE() {
       return "OVERRIDE";
     }
+    static get LISTENER() {
+      return "LISTENER";
+    }
 
     static register(
       package_id,
       target,
       fn,
       type = "MIXED",
-      { chain = undefined, bind = [] } = {}
+      { chain = undefined, bind = [] } = {},
     ) {
       const is_setter = target.endsWith("#set");
       target = !is_setter ? target : target.slice(0, -4);
@@ -60,7 +63,7 @@ Hooks.once("init", () => {
         fn_name = split.pop();
         obj = split.reduce(
           (x, y) => x[y],
-          globalThis[root_nm] ?? _eval(root_nm)
+          globalThis[root_nm] ?? _eval(root_nm),
         );
       }
 
@@ -73,18 +76,27 @@ Hooks.once("init", () => {
       }
       if (!descriptor || descriptor?.configurable === false)
         throw new Error(
-          `libWrapper Shim: '${target}' does not exist, could not be found, or has a non-configurable descriptor.`
+          `libWrapper Shim: '${target}' does not exist, could not be found, or has a non-configurable descriptor.`,
         );
 
       let original = null;
-      const wrapper =
-        chain ?? (type.toUpperCase?.() != "OVERRIDE" && type != 3)
-          ? function (...args) {
-              return fn.call(this, original.bind(this), ...bind, ...args);
-            }
-          : function (...args) {
-              return fn.call(this, ...bind, ...args);
-            };
+      const is_override =
+        type == 3 || type.toUpperCase?.() == "OVERRIDE" || type == 3;
+      const is_listener =
+        type == 4 || type.toUpperCase?.() == "LISTENER" || type == 4;
+      const wrapper = is_listener
+        ? function (...args) {
+            fn.call(this, ...bind, ...args);
+            return original.call(this, ...args);
+          }
+        : chain ?? !is_override
+        ? function (...args) {
+            return fn.call(this, original.bind(this), ...bind, ...args);
+          }
+        : function (...args) {
+            return fn.call(this, ...bind, ...args);
+          };
+
       if (!is_setter) {
         if (descriptor.value) {
           original = descriptor.value;
@@ -96,7 +108,7 @@ Hooks.once("init", () => {
       } else {
         if (!descriptor.set)
           throw new Error(
-            `libWrapper Shim: '${target}' does not have a setter`
+            `libWrapper Shim: '${target}' does not have a setter`,
           );
         original = descriptor.set;
         descriptor.set = wrapper;
@@ -114,7 +126,7 @@ Hooks.once("init", () => {
     // Package ID & Package Title - by default attempts to auto-detect, but you might want to hardcode your package ID and title here to avoid potential auto-detect issues
     const [PACKAGE_ID, PACKAGE_TITLE] = (() => {
       const match = (import.meta?.url ?? Error().stack)?.match(
-        /\/(worlds|systems|modules)\/(.+)(?=\/)/i
+        /\/(worlds|systems|modules)\/(.+)(?=\/)/i,
       );
       if (match?.length !== 3) return [null, null];
       const dirs = match[2].split("/");
@@ -133,7 +145,7 @@ Hooks.once("init", () => {
 
     if (!PACKAGE_ID || !PACKAGE_TITLE) {
       console.error(
-        "libWrapper Shim: Could not auto-detect package ID and/or title. The libWrapper fallback warning dialog will be disabled."
+        "libWrapper Shim: Could not auto-detect package ID and/or title. The libWrapper fallback warning dialog will be disabled.",
       );
       return;
     }
@@ -154,7 +166,7 @@ Hooks.once("init", () => {
 
       // Dialog code
       console.warn(
-        `${PACKAGE_TITLE}: libWrapper not present, using fallback implementation.`
+        `${PACKAGE_TITLE}: libWrapper not present, using fallback implementation.`,
       );
       game.settings.register(PACKAGE_ID, DONT_REMIND_AGAIN_KEY, {
         name: "",
