@@ -59,10 +59,11 @@ export declare class DamageInstance extends AbstractDamageRoll {
   get head(): terms.RollTerm;
 }
 
-export interface ArithmeticExpressionData extends RollTermData {
+export interface ArithmeticExpressionData
+  extends foundry.dice.terms.RollTermData {
   class?: "ArithmeticExpression";
   operator: ArithmeticOperator;
-  operands: [RollTermData, RollTermData];
+  operands: [foundry.dice.terms.RollTermData, foundry.dice.terms.RollTermData];
 }
 
 export declare class ArithmeticExpression extends terms.RollTerm<ArithmeticExpressionData> {
@@ -71,9 +72,9 @@ export declare class ArithmeticExpression extends terms.RollTerm<ArithmeticExpre
   get expression(): string;
 }
 
-export interface GroupingData extends RollTermData {
+export interface GroupingData extends foundry.dice.terms.RollTermData {
   class?: "Grouping";
-  term: RollTermData;
+  term: foundry.dice.terms.RollTermData;
 }
 
 export declare class Grouping extends terms.RollTerm<GroupingData> {
@@ -83,10 +84,18 @@ export declare class Grouping extends terms.RollTerm<GroupingData> {
 
 export declare class InstancePool extends terms.PoolTerm {}
 
-export interface IntermediateDieData extends RollTermData {
+export interface IntermediateDieData extends foundry.dice.terms.RollTermData {
   class?: string;
-  number: number | NumericTermData | FunctionTermData | GroupingData;
-  faces: number | NumericTermData | FunctionTermData | GroupingData;
+  number:
+    | number
+    | foundry.dice.terms.NumericTerm
+    | foundry.dice.terms.FunctionTermData
+    | GroupingData;
+  faces:
+    | number
+    | foundry.dice.terms.NumericTerm
+    | foundry.dice.terms.FunctionTermData
+    | GroupingData;
   die?: DieData | null;
 }
 

@@ -23,8 +23,11 @@ importers:
         specifier: ^0.17.2
         version: 0.17.2
       foundry-types:
-        specifier: https://gitpkg.vercel.app/foundryvtt/pf2e/types/foundry?master
-        version: https://gitpkg.vercel.app/foundryvtt/pf2e/types/foundry?master
+        specifier: https://gitpkg.vercel.app/foundryvtt/pf2e/types/foundry?v13-dev
+        version: https://gitpkg.vercel.app/foundryvtt/pf2e/types/foundry?v13-dev
+      typescript:
+        specifier: ^5.8.3
+        version: 5.8.3
 
 packages:
 
@@ -536,8 +539,8 @@ packages:
   eventemitter3@3.1.2:
     resolution: {integrity: sha512-tvtQIeLVHjDkJYnzf2dgVMxfuSGJeM/7UCG17TT4EumTfNtF+0nebF/4zWOIkCreAbtNqhGEboB6BWrwqNaw4Q==}
 
-  foundry-types@https://gitpkg.vercel.app/foundryvtt/pf2e/types/foundry?master:
-    resolution: {tarball: https://gitpkg.vercel.app/foundryvtt/pf2e/types/foundry?master}
+  foundry-types@https://gitpkg.vercel.app/foundryvtt/pf2e/types/foundry?v13-dev:
+    resolution: {tarball: https://gitpkg.vercel.app/foundryvtt/pf2e/types/foundry?v13-dev}
     version: 4.4.2
 
   function-bind@1.1.2:
@@ -646,8 +649,8 @@ packages:
   tr46@0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
 
-  typescript@5.6.3:
-    resolution: {integrity: sha512-hjcS1mhfuyi4WW8IWtjP7brDrG2cuDZukyrYrSauoXGNgx0S7zceP07adYkJycEr56BOUTNPzbInooiN3fn1qw==}
+  typescript@5.8.3:
+    resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -1155,7 +1158,7 @@ snapshots:
 
   eventemitter3@3.1.2: {}
 
-  foundry-types@https://gitpkg.vercel.app/foundryvtt/pf2e/types/foundry?master:
+  foundry-types@https://gitpkg.vercel.app/foundryvtt/pf2e/types/foundry?v13-dev:
     dependencies:
       '@types/jquery': 3.5.31
       '@types/node': 18.11.18
@@ -1163,7 +1166,7 @@ snapshots:
       socket.io: 4.8.0
       socket.io-client: 4.8.0
       tinymce: 6.8.5
-      typescript: 5.6.3
+      typescript: 5.8.3
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -1327,7 +1330,7 @@ snapshots:
 
   tr46@0.0.3: {}
 
-  typescript@5.6.3: {}
+  typescript@5.8.3: {}
 
   universal-user-agent@6.0.0: {}
 

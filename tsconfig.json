@@ -1,11 +1,49 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "ESNext",
+    "module": "ES2022",
     "moduleResolution": "Bundler",
-    "lib": ["esnext", "dom", "dom.iterable"],
+    "lib": [
+      "ES2023",
+      "ESNext.Array",
+      "ESNext.AsyncIterable",
+      "ESNext.Collection",
+      "ESNext.Iterator",
+      "ESNext.Object",
+      "ESNext.Promise",
+      "DOM",
+      "DOM.Iterable",
+      "DOM.AsyncIterable"
+    ],
+    "noEmit": true,
     "strict": true,
-    "types": ["jquery", "node", "foundry-types"]
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "allowImportingTsExtensions": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "isolatedModules": true,
+    "outDir": "dist",
+    "allowUnusedLabels": false,
+    "removeComments": false,
+    "resolveJsonModule": true,
+    "useDefineForClassFields": true,
+    "noErrorTruncation": true,
+    "types": ["jquery", "node"],
+    "typeRoots": ["./node_modules/@types"],
+    "paths": {
+      "@common/*": ["./node_modules/foundry-types/common/*"],
+      "@client/*": ["./node_modules/foundry-types/client/*"]
+    }
   },
-  "include": ["src", "scripts"]
+  "include": [
+    "./src/**/*",
+    "./scripts/**/*",
+    "./node_modules/foundry-types/global-external.d.mts"
+  ]
 }

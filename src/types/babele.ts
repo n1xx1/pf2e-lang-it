@@ -31,7 +31,7 @@ export declare class Babele {
 
   modules: ModuleDefinition[];
   converters: Record<string, BabeleConverter>;
-  packs: Collection<TranslatedCompendium>;
+  packs: Collection<string, TranslatedCompendium>;
 
   register(module: ModuleDefinition): void;
 

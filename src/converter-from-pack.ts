@@ -1,5 +1,5 @@
 import { spellcastingEntries } from "./spellcasting-entry";
-import type { CompendiumMapping, BabeleConverter } from "./types";
+import type { BabeleConverter, CompendiumMapping } from "./types/babele";
 
 let dynamicMapping: CompendiumMapping | null = null;
 
@@ -100,6 +100,7 @@ export const fromPackPf2: BabeleConverter<any[]> = (items, translations) => {
       const found = findTranslationSource(sourceId);
       if (found) {
         const [translationData1, mapping] = found;
+
         translationData = foundry.utils.mergeObject(
           mapping.map(data, translationData1),
           translationData,

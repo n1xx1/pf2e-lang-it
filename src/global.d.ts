@@ -18,5 +18,14 @@ declare global {
 
   const CONFIG: ConfigPF2e;
   const canvas: CanvasPF2e;
-  var game: GamePF2e;
+
+  namespace globalThis {
+    const game: GamePF2e;
+    export import fa = foundry.applications;
+    export import fav1 = foundry.appv1;
+    export import fc = foundry.canvas;
+    export import fd = foundry.documents;
+    export import fh = foundry.helpers;
+    export import fu = foundry.utils;
+  }
 }
