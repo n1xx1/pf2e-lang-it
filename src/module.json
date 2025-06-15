@@ -1,11 +1,11 @@
 {
   "id": "pf2e-lang-it",
   "title": "Italian [Pathfinder 2e]",
-  "version": "6.7.0.0",
+  "version": "7.1.1.0",
   "compatibility": {
-    "minimum": "12.327",
-    "verified": "12.327",
-    "maximum": "12"
+    "minimum": "13.345",
+    "verified": "13.345",
+    "maximum": "13"
   },
   "authors": [{ "name": "n1xx1" }],
   "description": "",
@@ -22,8 +22,8 @@
         "id": "pf2e",
         "type": "system",
         "compatibility": {
-          "minimum": "6.1.0",
-          "verified": "6.1.1"
+          "minimum": "7.1.0",
+          "verified": "7.1.1"
         }
       }
     ],
@@ -32,8 +32,8 @@
         "id": "babele",
         "type": "module",
         "compatibility": {
-          "minimum": "2.5.5",
-          "verified": "2.5.5"
+          "minimum": "2.7.5",
+          "verified": "2.7.5"
         }
       },
       {
@@ -41,7 +41,7 @@
         "type": "module",
         "compatibility": {
           "minimum": "1.0.0.0",
-          "verified": "1.12.14.0"
+          "verified": "1.13.2.0"
         }
       }
     ]
