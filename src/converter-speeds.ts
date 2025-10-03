@@ -1,5 +1,5 @@
 import { shouldConvertUnits } from ".";
-import { Converter } from "./babele";
+import { BabeleConverter } from "./types/babele";
 import { convertFeet } from "./utils";
 
 type Pf2Speed = {
@@ -14,9 +14,9 @@ type Pf2OtherSpeed = {
   label?: string;
 };
 
-export const speedPf2: Converter<Pf2Speed | undefined | null> = (
+export const speedPf2: BabeleConverter<Pf2Speed | undefined | null> = (
   speed,
-  translation?: string
+  translation?: string,
 ) => {
   if (!speed) {
     return speed;
@@ -32,10 +32,9 @@ export const speedPf2: Converter<Pf2Speed | undefined | null> = (
   };
 };
 
-export const otherSpeedsPf2: Converter<Pf2OtherSpeed[] | undefined | null> = (
-  otherSpeeds,
-  translation: Record<string, string>
-) => {
+export const otherSpeedsPf2: BabeleConverter<
+  Pf2OtherSpeed[] | undefined | null
+> = (otherSpeeds, translation: Record<string, string>) => {
   if (!otherSpeeds || !translation) {
     return otherSpeeds;
   }
