@@ -8,7 +8,7 @@ export function setupDamageRollExtension() {
 
   libWrapper!.register(
     ID,
-    "TextEditor._createInlineRoll",
+    "foundry.applications.ux.TextEditor.implementation._createInlineRoll",
     async function (
       wrapped,
       match: RegExpMatchArray,
