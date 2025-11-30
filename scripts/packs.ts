@@ -61,6 +61,8 @@ const itemSpellMappings: CompendiumMappingDefinition = {
     converter: `${ID}-heightening`,
     path: "system.heightening.levels",
   },
+  spellRitualPrimaryCheck: "system.ritual.primary.check",
+  spellRitualSecondaryChecks: "system.ritual.secondary.checks",
 };
 
 const journalMappings: CompendiumMappingDefinition = {
