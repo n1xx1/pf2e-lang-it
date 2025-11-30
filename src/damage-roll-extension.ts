@@ -171,7 +171,7 @@ function damageRollFormula(roll: types.DamageRoll) {
 }
 
 function formatLabelInstances(label: string, formula: string) {
-  if (!label.match(/(\$|\#[tTlL])[1-9]/) || label !== "#") {
+  if (!label.match(/(\$|\#[tTlL])[1-9]/) && label !== "#") {
     return label;
   }
 
@@ -194,7 +194,7 @@ function formatLabelInstances(label: string, formula: string) {
   const instances = roll.instances;
   for (let i = instances.length - 1; i >= 0; i--) {
     const [expression, damage, type] = damageInstanceFormula(instances[i]);
-    label = label.replace(`(\\$|#[tTlL])${i + 1}`, (m, k) => {
+    label = label.replace(new RegExp(`(\\$|#[tTlL])${i + 1}`), (m, k) => {
       switch (k) {
         case "$":
           return expression;
