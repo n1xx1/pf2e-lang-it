@@ -1,4 +1,15 @@
-const allowedTimes = ["1", "2", "3", "free", "reaction"];
+const allowedTimes = [
+  "0",
+  "free",
+  "1",
+  "2",
+  "3",
+  "1 or 2",
+  "1 to 3",
+  "2 or 3",
+  "2 rounds",
+  "reaction",
+];
 
 export function timePf2(time: string | number | null, translation?: string) {
   if (translation) {

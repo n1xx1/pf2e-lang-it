@@ -1,4 +1,4 @@
-import { CompendiumMappingDefinition } from "../src/babele";
+import type { CompendiumMappingDefinition } from "../src/types/babele";
 
 const ID = "pf2e-lang-it";
 
