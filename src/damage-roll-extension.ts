@@ -126,7 +126,7 @@ function loadRollClasses() {
 function damageInstanceFormula(
   instance: types.DamageInstance,
 ): [expr: string, damage: string, flavor: string] {
-  const plural = instance.isDeterministic && instance.expectedValue !== 1;
+  const plural = !instance.isDeterministic || instance.expectedValue !== 1;
   let parts: string[] = [];
   if (instance.type !== "untyped") {
     const type = damageMap[instance.type];
@@ -194,7 +194,7 @@ function formatLabelInstances(label: string, formula: string) {
   const instances = roll.instances;
   for (let i = instances.length - 1; i >= 0; i--) {
     const [expression, damage, type] = damageInstanceFormula(instances[i]);
-    label = label.replace(new RegExp(`(\\$|#[tTlL])${i + 1}`), (m, k) => {
+    label = label.replace(new RegExp(`(\\$|#[tTlL])${i + 1}`, "g"), (m, k) => {
       switch (k) {
         case "$":
           return expression;
