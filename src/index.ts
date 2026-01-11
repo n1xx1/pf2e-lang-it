@@ -14,6 +14,22 @@ export const ID = "pf2e-lang-it";
 
 const convertEnabled = false;
 
+const convertedFeet = {
+  "PF2E.Foot.Abbreviation": "m",
+  "PF2E.Foot.Label": "metro",
+  "PF2E.Foot.Plural": "metri",
+  "PF2E.Actor.Speed.LabelFeet": "Velocità (Metri)",
+  "PF2E.Area.InFeet": "Area (Metri)",
+  "PF2E.TravelSpeed.Feet": "Metri",
+  "PF2E.TravelSpeed.FeetAcronym": "m",
+  "PF2E.TravelSpeed.FeetPerMinute": "Metri al Minuto",
+  "PF2E.Action.Range.IncrementN": "Incremento di Gittata {n}m",
+  "PF2E.Action.Range.MaxN": "Gittata {n}m",
+  "PF2E.Actor.Creature.Sense.WithRange": "{sense} {range} Metri",
+  "PF2E.Actor.Creature.Sense.WithAcuityAndRange":
+    "{sense} ({acuity}) {range} Metri",
+};
+
 export function shouldConvertUnits() {
   return convertEnabled && game.i18n.lang === LANG;
 }
