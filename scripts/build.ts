@@ -66,14 +66,13 @@ for (const [id, mapping] of Object.entries(packs)) {
   const dist = pathJoin(distLangCompendiums, `pf2e.${id}.json`);
 
   await copyJsonFile<BabeleCompendium>(source, dist, (contents) => {
-    if (!contents?.label) {
-      return;
-    }
     return {
       ...contents,
       mapping,
     };
-  }).catch(() => {});
+  }).catch((e) => {
+    console.warn(`failed to copy compendium ${id}: ${e}`);
+  });
 }
 
 process.exit();
@@ -90,7 +89,7 @@ async function copyJsonFile<T1 = AnyJson>(
   source: string,
   output: string,
   transformer: (x: T1) => MaybePromise<AnyJson | null | undefined> = (x) =>
-    x as AnyJson
+    x as AnyJson,
 ) {
   const transformed = await transformer(await readFileJson(source));
   if (!transformed) return;
@@ -104,7 +103,7 @@ async function readFileJson<T = AnyJson>(file: string): Promise<T> {
 
 async function writeFileJson<T = AnyJson>(
   file: string,
-  data: T
+  data: T,
 ): Promise<void> {
   await fsWriteFile(file, JSON.stringify(data, null, 2));
 }
